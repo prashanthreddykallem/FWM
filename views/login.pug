@@ -14,12 +14,12 @@ html
             h5(style='color:#515151;') Login
             .mdl-card.mdl-shadow--4dp
                 .mdl-card__actions
-                    form.login-form(action='/', method='POST')
+                    form.login-form(action='/loginT', method='POST')
                         .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
                             input#email-id.mdl-textfield__input(type='text', name='username', data-required='')
-                            label.mdl-textfield__label(for='email-id') Email
+                            label.mdl-textfield__label(for='username') Email
                             span.mdl-textfield__error Enter a valid email id
                         .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
                             input#pass.mdl-textfield__input(type='password', name='password', data-required='')
-                            label.mdl-textfield__label(for='pass') Password
+                            label.mdl-textfield__label(for='password') Password
                         button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.butn(type='submit',value = 'submit' ) Login

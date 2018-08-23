@@ -6,6 +6,19 @@ var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var formidable = require('formidable'); 
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var flash = require('connect-flash');
+app.use(flash());
+app.use(session({secret: "Secret Cat!" , resave: true,
+    saveUninitialized: true
+}));
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
 
 
 var url = "mongodb://localhost:27017/users";
@@ -72,29 +85,40 @@ app.get('/login',function(req,res){
 
 });
 
-app.get('/profile',function(req,resabc){
-    var abc = FacultyDetails.findOne({},function(err,res){
-      var hjk= res
-      // console.log(res);
-      resabc.render("profile",{
-        name:JSON.stringify(hjk),        
-      } );
+// app.get('/profile',function(req,resabc){
+//     var abc = FacultyDetails.findOne({},function(err,res){
+//       var hjk= res
+//       // console.log(res);
+//       resabc.render("profile",{
+//         name:JSON.stringify(hjk),        
+//       } );
     
-  }) 
+//   }) 
     
     
-});
+// });
 
 app.get('/hello',function(req,res){
 
     res.send("Hello World");
 });
 
-app.get('/edit/:user/:id',function(req,res){
-  var Wid = req.params.id
-  var abc = FacultyDetails.find((ObjectId(Wid)),function(err,res){
-      var hjk= res[0].workshops[0].UID
+app.get('/Add/:user',function(req,res){
+    var user = req.params.user
+
+
+})
+
+app.get('/edit/:user/:title',function(req,resEdit){
+  var title = req.params.title
+  var uid = req.params.user
+  console.log(title);
+  var abc = FacultyDetails.find({ username: uid},{ workshops: { $elemMatch: { Title: title } } },function(err,res){
+      var hjk= res[0].workshops[0]
       console.log(hjk);
+      resEdit.render("edit",{
+        workshopDetails:JSON.stringify(hjk)
+      })
       // resabc.render("profile",{
       //   name:JSON.stringify(hjk),        
       // } );
@@ -103,15 +127,60 @@ app.get('/edit/:user/:id',function(req,res){
 
 });
 
+app.get('/upload/:user/:id',function(req,resUpl){
+  var Wid = req.params.id
+  var abc = FacultyDetails.find({$or:[{UID : Wid}]},function(err,res){
+      var hjk= res[0].workshops[0]
+      console.log(hjk);
+      resUpl.render("upl",{
+        workshopDetails:JSON.stringify(hjk)
+      })
+  })
+
+});
+app.post('/submitEdit',function(req,res){
+   
+  db.bar.update( {user_id : 123456 , "items.item_name" : "my_item_two" } , 
+                {$inc : {"items.$.price" : 1} } , 
+                false , 
+                true);
+  res.send("Edited Succesfully")
+});
+
+app.post('/fileUpload',function(req,res){
+  var form = new formidable.IncomingForm();
+
+    form.parse(req);
+
+    form.on('fileBegin', function (name, file){
+        file.path = __dirname + '/uploads/' + file.name;
+    });
+
+    form.on('file', function (name, file){
+        console.log('Uploaded ' + file.name);
+    });
+
+    res.render('uplSuccess')
+
+
+});
+
+// app.post('/loginT',function(req,res){
+//   var userid = req.body.username
+//   var password = req.body.password
+//   console.log(userid,password)
+//   res.send("Login")
+// });
+
 app.get('/success', (req, res) => res.send("Welcome "+req.query.username+"!!"));
-app.get('/error', (req, res) => res.send("error logging in"));
+app.get('/error', (req, res) =>console.log(req.query.username) );// res.send("error logging in"));
 
 passport.serializeUser(function(user, cb) {
   cb(null, user.id);
 });
 
 passport.deserializeUser(function(id, cb) {
-  User.findById(id, function(err, user) {
+  UserDetails.findById(id, function(err, user) {
     cb(err, user);
   });
 });
@@ -121,28 +190,52 @@ passport.use(new LocalStrategy(
     UserDetails.findOne({
         username: username
       }, function(err, user) {
-        console.log(1332);
+        
         if (err) {
           return done(err);
         }
 
         if (!user) {
-          return done(null, false);
+          return done(null, false,{message:'Incorrect Username'});
         }
 
-        if (user.password !== password) {
-          return done(null, false);
+        if (user.password != password) {
+          return done(null, false,{message:'Incorrect Password'});
         }
         return done(null, user);
       });
   }
 ));
 
-app.post('/',
+app.post('/loginT',
   passport.authenticate('local', { failureRedirect: '/error' }),
-  function(req, res) {
-    res.redirect('/success?username='+req.user.username);
-  });
+  function(req, resabc) {
+    if((req.user.username)=='admin'){
+      var abc = FacultyDetails.find({},function(err,res){
+         var hjk= res
+      var abc = req.user.username
+      console.log(hjk);
+      resabc.render("profile",{
+        name:JSON.stringify(hjk),        
+      } );
+
+    } )
+   }
+   else { 
+   var abc = FacultyDetails.findOne({$or:[{username : req.user.username}]},function(err,res){
+      var hjk= res
+      var abc = req.user.username
+      console.log(hjk);
+      resabc.render("profile",{
+        name:JSON.stringify(hjk),        
+      } );
+   
+  }) 
+    
+   }  
+});
+
+  
 
 app.get('*', function(req, res){
    res.send('Sorry, this is an invalid URL.');

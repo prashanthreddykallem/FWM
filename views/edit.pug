@@ -1,0 +1,32 @@
+html
+    head
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700', type='text/css')
+        link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+        style
+            include ./css/stylehp.css            
+            include ./css/material.min.css            
+        script
+            include ./css/material.min.js
+        //- title  Faculty Workshop Management
+        - var wDetails = JSON.parse(workshopDetails)
+    body
+        .main
+            form.complaint-form(action='/submitEdit', method='POST')
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#title.mdl-textfield__input(type='text', name='title', value=`${JSON.stringify(wDetails.Title).replace(/"/g,"")}`)
+                    label.mdl-textfield__label(for='title') Title
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#duration.mdl-textfield__input(type='text', name='duration', value=`${JSON.stringify(wDetails.Duration).replace(/"/g,"")}`)
+                    label.mdl-textfield__label(for='duration') Duration
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#organized.mdl-textfield__input(type='text', name='organized', value=`${JSON.stringify(wDetails.Organized).replace(/"/g,"")}`)
+                    label.mdl-textfield__label(for='organized') Organized by
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#sponsored.mdl-textfield__input(type='text', name='sponsored', value=`${JSON.stringify(wDetails.Sponsored).replace(/"/g,"")}`)
+                    label.mdl-textfield__label(for='sponsored') Sponsored by 
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#fees.mdl-textfield__input(type='text', name='fees', pattern='[0-9]*', value=`${JSON.stringify(wDetails.Fee).replace(/"/g,"")}`)
+                    label.mdl-textfield__label(for='fees') Fees
+                div
+                    button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.butn(type='submit') Submit

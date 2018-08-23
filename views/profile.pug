@@ -10,10 +10,9 @@ html
         script
             include ./css/material.min.js
         title  Profile
-        - var fdetails = JSON.parse(name).name
+        - var fdetails = JSON.parse(name).username
         - var details = JSON.parse(name).workshops        
     body
-        h1
         div.main
             h1.text-center(color:#515151) Faculty Details
             table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
@@ -47,6 +46,8 @@ html
                         td #{val.Fee}
                         td #{val.UID}
                         td
-                            button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("edit/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) edit
+                            button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("edit/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.Title)})`) edit
                         td
-                            button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick='location.href="/upload"') Upload Certificate               
+                            button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("upload/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) Upload Certificate               
+            button(type="button"  class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("Add/"+${JSON.stringify(fdetails)})`) Add New Workshops                                    
+                            

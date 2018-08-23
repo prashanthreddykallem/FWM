@@ -1,0 +1,7 @@
+html
+  head
+    title Simple Upload Example
+  body
+    form(action='/fileUpload', enctype='multipart/form-data', method='post')
+      input(type='file', name='upload', multiple='')
+      input(type='submit', value='Upload')
