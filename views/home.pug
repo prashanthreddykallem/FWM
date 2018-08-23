@@ -1,0 +1,18 @@
+doctype html
+html
+    head
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700', type='text/css')
+        link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+        style
+            include ./css/stylehp.css            
+            include ./css/material.min.css            
+        script
+            include ./css/material.min.js
+        title  Faculty Workshop Management
+    body
+        div.main
+            h1.text-center(color:#515151) Faculty Workshop Management
+            div#buttonid
+                button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick='location.href="/login"') Login
+                button(type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored butn" onclick='location.href="/register"') Register

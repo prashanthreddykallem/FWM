@@ -1,0 +1,27 @@
+ html, body {
+    height: 100%;
+    margin: 0;
+        }
+
+
+
+
+
+.main{
+	height: 100%;
+	background-color: #f6f6f6;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	flex-direction:column;
+}
+
+.complaint-form,.status-form,.login-form{
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	flex-direction:column;
+	
+	
+}
+ 

@@ -1,0 +1,52 @@
+html
+    head
+        
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700', type='text/css')
+        link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+        style
+            include ./css/stylehp.css            
+            include ./css/material.min.css            
+        script
+            include ./css/material.min.js
+        title  Profile
+        - var fdetails = JSON.parse(name).name
+        - var details = JSON.parse(name).workshops        
+    body
+        h1
+        div.main
+            h1.text-center(color:#515151) Faculty Details
+            table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+                thead
+                    tr
+                        th.mdl-data-table__cell--non-numeric Title
+                        th.mdl-data-table__cell--non-numeric Duration
+                        th.mdl-data-table__cell--non-numeric Organized by 
+                        th.mdl-data-table__cell--non-numeric Sponsored
+                        th Fees
+                        th.mdl-data-table__cell--non-numeric UID
+                        th.mdl-data-table__cell--non-numeric Edit
+                        th.mdl-data-table__cell--non-numeric Upload Certificate 
+                    //- tr
+                    //-     td #{JSON.parse(name)[0]["Title"]}
+                    //-     td #{JSON.parse(name)[0]["Duration"]}
+                    //-     td #{JSON.parse(name)[0]["Organized"]}
+                    //-     td #{JSON.parse(name)[0]["Sponsored"]}
+                    //-     td #{JSON.parse(name)[0]["Fee"]}
+                    //-     td #{JSON.parse(name)[0]["UID"]}
+                    //-     td
+                    //-         button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick='location.href="/edit#{JSON.parse(name)[0][/"UID"/]}"') edit
+                    //-     td
+                    //-         button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick='location.href="/upload"') Upload Certificate
+                each val in details
+                    tr
+                        td #{val.Title}
+                        td #{val.Duration}
+                        td #{val.Organized}
+                        td #{val.Sponsored}
+                        td #{val.Fee}
+                        td #{val.UID}
+                        td
+                            button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("edit/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) edit
+                        td
+                            button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick='location.href="/upload"') Upload Certificate               
