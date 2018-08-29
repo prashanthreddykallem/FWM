@@ -102,7 +102,7 @@ app.post('/submitRegister',function(req,res){
   })
    newFaculty.save(); 
    newUser.save();    
-   res.send("Submitted Successfully");
+   res.send("Submitted(Registered) Successfully WIP");
 
                          
 
@@ -162,7 +162,7 @@ dbo.collection("faculty").update(
 
 })
 
-res.send("Hello")
+res.send("Added Workshop Successfully WIP")
 
 })
 
@@ -225,7 +225,7 @@ dbo.collection("faculty").update(
    
   
 });
-res.send("Hello World")
+res.send("Edited Successfully WIP")
 })
 
 app.post('/fileUpload',function(req,res){
