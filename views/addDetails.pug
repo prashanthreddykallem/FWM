@@ -1,6 +1,5 @@
 html
     head
-        //- - var username = JSON.parse(username);
         meta(name="viewport" content="width=device-width, initial-scale=1")
         link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700', type='text/css')
         link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
@@ -10,31 +9,28 @@ html
         script
             include ./css/material.min.js
         //- title  Faculty Workshop Management
-        - var wDetails = JSON.parse(workshopDetails);
-        
+        - var username = JSON.parse(name)
     body
         .main
-            form.complaint-form(action='/submitEdit', method='POST')
+            h1= username          
+            form.complaint-form(action='/submitAdd', method='POST')
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#title.mdl-textfield__input(type='text', name='title', value=`${JSON.stringify(wDetails.Title).replace(/"/g,"")}`)
+                    input#title.mdl-textfield__input(type='text', name='title', value="")
                     label.mdl-textfield__label(for='title') Title
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#duration.mdl-textfield__input(type='text', name='duration', value=`${JSON.stringify(wDetails.Duration).replace(/"/g,"")}`)
+                    input#duration.mdl-textfield__input(type='text', name='duration', value="")
                     label.mdl-textfield__label(for='duration') Duration
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#organized.mdl-textfield__input(type='text', name='organized', value=`${JSON.stringify(wDetails.Organized).replace(/"/g,"")}`)
+                    input#organized.mdl-textfield__input(type='text', name='organized', value="")
                     label.mdl-textfield__label(for='organized') Organized by
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#sponsored.mdl-textfield__input(type='text', name='sponsored', value=`${JSON.stringify(wDetails.Sponsored).replace(/"/g,"")}`)
+                    input#sponsored.mdl-textfield__input(type='text', name='sponsored', value="")
                     label.mdl-textfield__label(for='sponsored') Sponsored by 
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#fees.mdl-textfield__input(type='text', name='fees', pattern='[0-9]*', value=`${JSON.stringify(wDetails.Fee).replace(/"/g,"")}`)
+                    input#fees.mdl-textfield__input(type='text', name='fees', pattern='[0-9]*', value="")
                     label.mdl-textfield__label(for='fees') Fees
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
                     input#fees.mdl-textfield__input(type='text', name='username', value=`${JSON.stringify(username).replace(/"/g,"")}`)
-                    label.mdl-textfield__label(for='username') username 
-                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#fees.mdl-textfield__input(type='text', name='id', value=`${JSON.stringify(wDetails._id).replace(/"/g,"")}`)
-                    label.mdl-textfield__label(for='id') id       
+                    label.mdl-textfield__label(for='username') username
                 div
                     button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.butn(type='submit') Submit

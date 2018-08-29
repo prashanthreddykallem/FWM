@@ -15,6 +15,7 @@ html
     body
         div.main
             h1.text-center(color:#515151) Faculty Details
+            h2.text-center(color:#515151)="Welcome " + fdetails
             table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
                 thead
                     tr
@@ -44,10 +45,10 @@ html
                         td #{val.Organized}
                         td #{val.Sponsored}
                         td #{val.Fee}
-                        td #{val.UID}
+                        td #{val._id}
                         td
                             button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("edit/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.Title)})`) edit
                         td
                             button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("upload/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) Upload Certificate               
-            button(type="button"  class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("Add/"+${JSON.stringify(fdetails)})`) Add New Workshops                                    
+            button(type="button"  class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("addDetails/"+${JSON.stringify(fdetails)})`) Add New Workshops                                    
                             

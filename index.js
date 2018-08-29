@@ -10,6 +10,9 @@ var formidable = require('formidable');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var flash = require('connect-flash');
+var ObjectID = require('mongodb').ObjectID;
+
+
 app.use(flash());
 app.use(session({secret: "Secret Cat!" , resave: true,
     saveUninitialized: true
@@ -25,21 +28,31 @@ var url = "mongodb://localhost:27017/users";
 mongoose.connect('mongodb://localhost/users');
 const Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
+var workshopSchema = new Schema({ 
+                  Title: String,
+                  Duration :String,
+                  Organized : String,
+                  Sponsored : String,
+                  Fee : String,                  
+                              });
+
+
 const UserDetail = new Schema({
       username: String,
       password: String
     });
 const FacultyDetail = new Schema({
-      _id : ObjectId, 
+      // _id : ObjectId, 
       name : String,
+      username:String,
       department : String,
-      workshops : Array
+      workshops : [workshopSchema]
 
 
 })    
 const UserDetails = mongoose.model('loginData', UserDetail, 'loginData');
 const FacultyDetails= mongoose.model('faculty',FacultyDetail,'faculty');
-var details
+// var Fdetails = new Facultydetails; 
 var recordDetails
 var myresult
 var result
@@ -49,24 +62,7 @@ app.set('views','./views');
 app.use(passport.initialize());
 app.use(passport.session());
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("users");  
-  dbo.collection("faculty").find({}).toArray(function(err, result) {
-    return new Promise((resolve, reject) =>{  
-    if (err) throw err;
-    // console.log(result);
-    // resolve(result)
-    // details = result[0].workshops ;
-    // return details;
-    // console.log(result); 
-    db.close();
-   }); 
-  });
-  // console.log(result);
-  
-});
-// console.log(result);
+
 app.get('/index',function(req,res){
 
     res.render('home');
@@ -85,6 +81,32 @@ app.get('/login',function(req,res){
 
 });
 
+app.get('/register',function(req,res){
+
+  res.render("register")
+
+});
+
+app.post('/submitRegister',function(req,res){
+  
+  
+  var newUser = UserDetails({username:req.body.username,
+                         password:req.body.password })
+                          
+
+  var newFaculty= FacultyDetails({
+    username   : req.body.username,
+    name       : req.body.name,
+    department : req.body.dept,  
+    workshops : []
+  })
+   newFaculty.save(); 
+   newUser.save();    
+   res.send("Submitted Successfully");
+
+                         
+
+});
 // app.get('/profile',function(req,resabc){
 //     var abc = FacultyDetails.findOne({},function(err,res){
 //       var hjk= res
@@ -103,9 +125,44 @@ app.get('/hello',function(req,res){
     res.send("Hello World");
 });
 
-app.get('/Add/:user',function(req,res){
-    var user = req.params.user
+app.get('/addDetails/:user',function(req,res){
+    var user = req.params.user ;
 
+    res.render("addDetails",{
+        name:JSON.stringify(user),        
+      } );
+
+
+
+})
+
+app.post('/submitAdd',function(req,res){
+  var insertObj =  {
+                    _id       : new ObjectID(),   
+                    Title     : req.body.title,
+                    Duration  : req.body.duration,
+                    Organized : req.body.organized,
+                    Sponsored : req.body.sponsored,
+                    Fee       : req.body.fees 
+                } ;
+ console.log(insertObj)               
+
+  //  Fdetails.name("ABC").workshops.push(insertObj)             
+
+MongoClient.connect(url,function(err,db){
+if(err) throw err;
+var dbo = db.db("users");
+
+
+dbo.collection("faculty").update(
+   { name: req.body.username },
+   { $push:{workshops: insertObj  }}
+)
+
+
+})
+
+res.send("Hello")
 
 })
 
@@ -117,7 +174,8 @@ app.get('/edit/:user/:title',function(req,resEdit){
       var hjk= res[0].workshops[0]
       console.log(hjk);
       resEdit.render("edit",{
-        workshopDetails:JSON.stringify(hjk)
+        workshopDetails:JSON.stringify(hjk),
+        username:uid
       })
       // resabc.render("profile",{
       //   name:JSON.stringify(hjk),        
@@ -139,13 +197,36 @@ app.get('/upload/:user/:id',function(req,resUpl){
 
 });
 app.post('/submitEdit',function(req,res){
+  var editObj =  {
+                    // _id       : new ObjectID(),   
+                    Title     : req.body.title,
+                    Duration  : req.body.duration,
+                    Organized : req.body.organized,
+                    Sponsored : req.body.sponsored,
+                    Fee       : req.body.fees 
+                } ;
+//  console.log(insertObj)               
+
+  //  Fdetails.name("ABC").workshops.push(insertObj)             
+
+MongoClient.connect(url,function(err,db){
+if(err) throw err;
+var dbo = db.db("users");
+
+console.log(req.body.id)
+dbo.collection("faculty").update(
+   { name: req.body.username,"workshops.Title":req.body.title },
+   { $set:{"workshops.$.Title"      : req.body.title,
+            "workshops.$.Duration"  : req.body.duration,
+            "workshops.$.Organized" : req.body.organized,
+            "workshops.$.Sponsored" : req.body.sponsored,
+            "workshops.$.Fee"       : req.body.fees                              }}
+)
    
-  db.bar.update( {user_id : 123456 , "items.item_name" : "my_item_two" } , 
-                {$inc : {"items.$.price" : 1} } , 
-                false , 
-                true);
-  res.send("Edited Succesfully")
+  
 });
+res.send("Hello World")
+})
 
 app.post('/fileUpload',function(req,res){
   var form = new formidable.IncomingForm();
@@ -160,20 +241,14 @@ app.post('/fileUpload',function(req,res){
         console.log('Uploaded ' + file.name);
     });
 
-    res.render('uplSuccess')
+    res.render('uplSuccess');
 
 
 });
 
-// app.post('/loginT',function(req,res){
-//   var userid = req.body.username
-//   var password = req.body.password
-//   console.log(userid,password)
-//   res.send("Login")
-// });
 
 app.get('/success', (req, res) => res.send("Welcome "+req.query.username+"!!"));
-app.get('/error', (req, res) =>console.log(req.query.username) );// res.send("error logging in"));
+app.get('/error', (req, res) =>res.send("Fail") );// res.send("error logging in"));
 
 passport.serializeUser(function(user, cb) {
   cb(null, user.id);
