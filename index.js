@@ -289,8 +289,8 @@ app.post('/loginT',
       var abc = FacultyDetails.find({},function(err,res){
          var hjk= res
       var abc = req.user.username
-      console.log(hjk);
-      resabc.render("profile",{
+      // console.log(hjk);
+      resabc.render("adminprofile",{
         name:JSON.stringify(hjk),        
       } );
 
