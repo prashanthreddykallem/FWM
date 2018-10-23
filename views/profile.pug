@@ -8,7 +8,32 @@ html
             include ./css/stylehp.css            
             include ./css/material.min.css            
         script
-            include ./css/material.min.js
+            include ./css/material.min.js 
+        script
+            include ./css/search.js   
+        script 
+            include ./css/jquery.js       
+        script(src='./css/material.min.js')
+        script(src='./css/search.js') 
+        //- script. 
+        //-      function myFunction(){
+        //-      var input, filter, table, tr, td, i;
+        //-      input = document.getElementById("myInput");
+        //-      filter = input.value.toUpperCase();
+        //-      table = document.getElementById("myTable");
+        //-      tr = table.getElementsByTagName("tr");
+             
+        //-      for (i = 0; i < tr.length; i++) {
+        //-      td = tr[i].getElementsByTagName("td")[0];
+        //-      if (td) {
+        //-      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        //-      tr[i].style.display = "";
+        //-      } else {
+        //-      tr[i].style.display = "none";
+        //-      }
+        //-      }
+        //-      }
+        //-      }           
         title  Profile
         - var fdetails = JSON.parse(name).username
         - var details = JSON.parse(name).workshops        
@@ -16,7 +41,17 @@ html
         div.main
             h1.text-center(color:#515151) Faculty Details
             h2.text-center(color:#515151)="Welcome " + fdetails
-            table.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+            script.
+                $(document).ready(function(){
+                $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+                });
+                });
+            input#myInput(type='text', onkeyup="myFunction()"  placeholder='Search for names..')
+            table#myTable.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
                 thead
                     tr
                         th.mdl-data-table__cell--non-numeric Title
@@ -50,5 +85,4 @@ html
                             button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("edit/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.Title)})`) edit
                         td
                             button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("upload/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) Upload Certificate               
-            button(type="button"  class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("addDetails/"+${JSON.stringify(fdetails)})`) Add New Workshops                                    
-                            
+            button(type="button"  class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("addDetails/"+${JSON.stringify(fdetails)})`) Add New Workshops
