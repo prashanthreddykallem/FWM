@@ -30,6 +30,9 @@ html
                     input#fees.mdl-textfield__input(type='text', name='fees', pattern='[0-9]*', value="")
                     label.mdl-textfield__label(for='fees') Fees
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#fees.mdl-textfield__input(type='text', name='date', value="")
+                    label.mdl-textfield__label(for='date') Date (in dd/mm/yyyy format)
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
                     input#fees.mdl-textfield__input(type='text', name='username', value=`${JSON.stringify(username).replace(/"/g,"")}`)
                     label.mdl-textfield__label(for='username') username
                 div

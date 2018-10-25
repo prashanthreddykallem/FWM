@@ -39,7 +39,8 @@ html
                         th.mdl-data-table__cell--non-numeric Organized by 
                         th.mdl-data-table__cell--non-numeric Sponsored
                         th Fees
-                        th.mdl-data-table__cell--non-numeric UID
+                        th.mdl-data-table__cell--non-numeric Date
+                        //- th.mdl-data-table__cell--non-numeric UID
                         th.mdl-data-table__cell--non-numeric Edit
                         th.mdl-data-table__cell--non-numeric Upload Certificate 
                     //- tr
@@ -60,7 +61,8 @@ html
                         td #{val.Organized}
                         td #{val.Sponsored}
                         td #{val.Fee}
-                        td #{val._id}
+                            td #{val.Date}
+                            //- td #{val._id}
                         td
                             button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("edit/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.Title)})`) edit
                         td

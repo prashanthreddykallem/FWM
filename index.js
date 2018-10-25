@@ -33,7 +33,8 @@ var workshopSchema = new Schema({
                   Duration :String,
                   Organized : String,
                   Sponsored : String,
-                  Fee : String,                  
+                  Fee : String,
+                  Date : String                  
                               });
 
 
@@ -143,7 +144,9 @@ app.post('/submitAdd',function(req,res){
                     Duration  : req.body.duration,
                     Organized : req.body.organized,
                     Sponsored : req.body.sponsored,
-                    Fee       : req.body.fees 
+                    Fee       : req.body.fees,
+                    Date      : req.body.date  
+
                 } ;
  console.log(insertObj)               
 
@@ -203,7 +206,8 @@ app.post('/submitEdit',function(req,res){
                     Duration  : req.body.duration,
                     Organized : req.body.organized,
                     Sponsored : req.body.sponsored,
-                    Fee       : req.body.fees 
+                    Fee       : req.body.fees,
+                    Date      : req.body.date  
                 } ;
 //  console.log(insertObj)               
 
@@ -220,7 +224,8 @@ dbo.collection("faculty").update(
             "workshops.$.Duration"  : req.body.duration,
             "workshops.$.Organized" : req.body.organized,
             "workshops.$.Sponsored" : req.body.sponsored,
-            "workshops.$.Fee"       : req.body.fees                              }}
+            "workshops.$.Fee"       : req.body.fees, 
+            "workshops.$.Date"      : req.body.date                        }}
 )
    
   
