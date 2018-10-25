@@ -12,24 +12,51 @@ html
         script
             include ./css/search.js   
         script 
-            include ./css/jquery.js       
+            include ./css/jquery.js              
         script(src='./css/material.min.js')         
         title  Profile
         - var fdetails = JSON.parse(name).username
-        - var details = JSON.parse(name).workshops        
-    body
+        - var details = JSON.parse(name).workshops     
+    .mdl-layout.mdl-js-layout.mdl-layout--fixed-header
+        header.mdl-layout__header
+            .mdl-layout__header-row
+                // Title
+                span.mdl-layout-title Faculty Workshop Management
+                // Add spacer, to align navigation to the right
+                .mdl-layout-spacer
+                // Navigation. We hide it in small screens.
+                nav.mdl-navigation.mdl-layout--large-screen-only
+                    a.mdl-navigation__link(href='') Logout
         div.main
             h1.text-center(color:#515151) Faculty Details
             h2.text-center(color:#515151)="Welcome " + fdetails
             script.
+                function convertDate(d) {
+                    var p = d.split("/");
+                    return +(p[2]+p[1]+p[0]);
+                    }
+
+                function sortByDate() {
+                    var tbody = document.querySelector("#results tbody");
+                    // get trs as array for ease of use
+                    var rows = [].slice.call(tbody.querySelectorAll("tr"));
+
+                    rows.sort(function(a,b) {
+                    return convertDate(a.cells[0].innerHTML) - convertDate(b.cells[0].innerHTML);
+                    });
+
+                    rows.forEach(function(v) {
+                    tbody.appendChild(v); // note that .appendChild() *moves* elements
+                    });
+                }
                 $(document).ready(function(){
-                $("#myInput").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-                });
-                });
+                    $("#myInput").on("keyup", function() {
+                        var value = $(this).val().toLowerCase();
+                        $("#myTable tr").filter(function() {
+                            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                                                        });
+                                                    });                  
+                                    });
             input#myInput(type='text', onkeyup="myFunction()"  placeholder='Search for names..')
             table#myTable.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
                 thead
@@ -42,7 +69,10 @@ html
                         th.mdl-data-table__cell--non-numeric Date
                         //- th.mdl-data-table__cell--non-numeric UID
                         th.mdl-data-table__cell--non-numeric Edit
-                        th.mdl-data-table__cell--non-numeric Upload Certificate 
+                        th.mdl-data-table__cell--non-numeric Upload/Delete Certificate
+                        th.mdl-data-table__cell--non-numeric View Certificate
+                        th.mdl-data-table__cell--non-numeric Delete Workshop                        
+
                     //- tr
                     //-     td #{JSON.parse(name)[0]["Title"]}
                     //-     td #{JSON.parse(name)[0]["Duration"]}
@@ -54,17 +84,22 @@ html
                     //-         button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick='location.href="/edit#{JSON.parse(name)[0][/"UID"/]}"') edit
                     //-     td
                     //-         button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick='location.href="/upload"') Upload Certificate
-                each val in details
-                    tr
-                        td #{val.Title}
-                        td #{val.Duration}
-                        td #{val.Organized}
-                        td #{val.Sponsored}
-                        td #{val.Fee}
+                tbody
+                    each val in details
+                        tr
+                            td #{val.Title}
+                            td #{val.Duration}
+                            td #{val.Organized}
+                            td #{val.Sponsored}
+                            td #{val.Fee}
                             td #{val.Date}
                             //- td #{val._id}
-                        td
-                            button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("edit/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.Title)})`) edit
-                        td
-                            button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("upload/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) Upload Certificate               
+                            td
+                                button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("edit/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.Title)})`) edit
+                            td
+                                button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("upload/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) U/D Certificate               
+                            td
+                                button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("upload/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) View Certificate
+                            td
+                                button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("upload/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) Delete Workshop    
             button(type="button"  class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("addDetails/"+${JSON.stringify(fdetails)})`) Add New Workshops

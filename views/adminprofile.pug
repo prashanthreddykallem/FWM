@@ -40,7 +40,8 @@ html
                         th Date
                         //- th.mdl-data-table__cell--non-numeric UID
                         th.mdl-data-table__cell--non-numeric Edit
-                        th.mdl-data-table__cell--non-numeric Upload Certificate 
+                        //- th.mdl-data-table__cell--non-numeric Upload/Delete Certificate 
+                        th.mdl-data-table__cell--non-numeric View Certificate
                     //- tr
                     //-     td #{JSON.parse(name)[0]["Title"]}
                     //-     td #{JSON.parse(name)[0]["Duration"]}
@@ -66,7 +67,9 @@ html
                             //- td #{val._id}
                             td
                                 button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("edit/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.Title)})`) edit
+                            //- td
+                                button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("upload/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) Upload Certificate
                             td
-                                button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("upload/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) Upload Certificate               
+                                button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("upload/"+${JSON.stringify(fdetails)}+"/"+${JSON.stringify(val.UID)})`) View Certificate                   
             button(type="button"  class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick=`window.location.replace("addDetails/"+${JSON.stringify(fdetails)})`) Add New Workshops                                    
                             
