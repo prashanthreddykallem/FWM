@@ -12,28 +12,29 @@ html
         - var username = JSON.parse(name)
     body
         .main
-            h1= username          
+            h1= "Add New Workshop Details"
+            h8= "All Fields Required"          
             form.complaint-form(action='/submitAdd', method='POST')
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#title.mdl-textfield__input(type='text', name='title', value="")
+                    input#title.mdl-textfield__input(type='text', name='title', value="" required)
                     label.mdl-textfield__label(for='title') Title
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#duration.mdl-textfield__input(type='text', name='duration', value="")
+                    input#duration.mdl-textfield__input(type='text', name='duration', value="" required)
                     label.mdl-textfield__label(for='duration') Duration
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#organized.mdl-textfield__input(type='text', name='organized', value="")
-                    label.mdl-textfield__label(for='organized') Organized by
+                    input#organized.mdl-textfield__input(type='text', name='organized', value="" required)
+                    label.mdl-textfield__label(for='organized') Organized by (Enter '-' if No value)
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#sponsored.mdl-textfield__input(type='text', name='sponsored', value="")
-                    label.mdl-textfield__label(for='sponsored') Sponsored by 
+                    input#sponsored.mdl-textfield__input(type='text', name='sponsored', value="" required)
+                    label.mdl-textfield__label(for='sponsored') Sponsored by (Enter '-' if No value)
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#fees.mdl-textfield__input(type='text', name='fees', pattern='[0-9]*', value="")
-                    label.mdl-textfield__label(for='fees') Fees
+                    input#fees.mdl-textfield__input(type='text', name='fees', pattern='[0-9]*', value="" required)
+                    label.mdl-textfield__label(for='fees') Fees 
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#fees.mdl-textfield__input(type='text', name='date', value="")
+                    input#fees.mdl-textfield__input(type='text', name='date', value="" required pattern='[0-9]{1,2}(/|-)[0-9]{1,2}(/|-)[0-9]{4}')
                     label.mdl-textfield__label(for='date') Date (in dd/mm/yyyy format)
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#fees.mdl-textfield__input(type='text', name='username', value=`${JSON.stringify(username).replace(/"/g,"")}`)
-                    label.mdl-textfield__label(for='username') username
+                    input#fees.mdl-textfield__input(type='hidden', name='username', value=`${JSON.stringify(username).replace(/"/g,"")}`)
+                    //- label.mdl-textfield__label(for='username') username
                 div
                     button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.butn(type='submit') Submit
