@@ -31,13 +31,15 @@ html
                     input#fees.mdl-textfield__input(type='text', name='fees', pattern='[0-9]*', value=`${JSON.stringify(wDetails.Fee).replace(/"/g,"")}`)
                     label.mdl-textfield__label(for='fees') Fees
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#fees.mdl-textfield__input(type='text', name='date', value="")
+                    input#fees.mdl-textfield__input(type='text', name='date',value=`${JSON.stringify(wDetails.Date).replace(/"/g,"")}` )
                     label.mdl-textfield__label(for='date') Date (in dd/mm/yyyy format)    
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#fees.mdl-textfield__input(type='text', name='username', value=`${JSON.stringify(username).replace(/"/g,"")}`)
-                    label.mdl-textfield__label(for='username') username 
+                    input#fees.mdl-textfield__input(type='hidden', name='username', value=`${JSON.stringify(username).replace(/"/g,"")}`)
+                    //- label.mdl-textfield__label(for='username') username 
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-                    input#fees.mdl-textfield__input(type='text', name='id', value=`${JSON.stringify(wDetails._id).replace(/"/g,"")}`)
-                    label.mdl-textfield__label(for='id') id       
+                    input#fees.mdl-textfield__input(type='hidden', name='id', value=`${JSON.stringify(wDetails._id).replace(/"/g,"")}`)
+                    //- label.mdl-textfield__label(for='id') id       
                 div
                     button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.butn(type='submit') Submit
+                    button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.butn(type='submit' formaction="/deleteWS") Delete
+                    button(type="button" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored butn" onclick='location.href="/login"') Back to Profile            
