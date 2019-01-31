@@ -1,0 +1,26 @@
+doctype html(lang='en')
+html 
+    head
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        style
+            include ./css/stylehp.css    
+        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700', type='text/css')
+        link(rel='stylesheet', href='https://code.getmdl.io/1.3.0/material.blue_grey-indigo.min.css')
+        link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+        script(defer='', src='https://code.getmdl.io/1.3.0/material.min.js')
+
+    body
+        .main
+            h5(style='color:#515151;') Login
+            h4(style='color:#515151;') Wrong username or password
+            .mdl-card.mdl-shadow--4dp
+                .mdl-card__actions
+                    form.login-form(action='/loginT', method='POST')
+                        .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                            input#email-id.mdl-textfield__input(type='text', name='username', data-required='')
+                            label.mdl-textfield__label(for='username') Email
+                            span.mdl-textfield__error Enter a valid email id
+                        .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                            input#pass.mdl-textfield__input(type='password', name='password', data-required='')
+                            label.mdl-textfield__label(for='password') Password
+                        button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.butn(type='submit',value = 'submit' ) Login

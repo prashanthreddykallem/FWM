@@ -11,7 +11,7 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var flash = require('connect-flash');
 var ObjectID = require('mongodb').ObjectID;
-
+var fs = require('fs')
 
 app.use(flash());
 app.use(session({secret: "Secret Cat!" , resave: true,
@@ -73,14 +73,7 @@ app.get('/index',function(req,res){
 
 });
 
-app.get('/login',function(req,res){
-
-    res.render("login");
-
-    // res.send("This is login page");
-
-
-});
+// 
 
 app.get('/register',function(req,res){
 
@@ -103,7 +96,7 @@ app.post('/submitRegister',function(req,res){
   })
    newFaculty.save(); 
    newUser.save();    
-   res.send("Submitted(Registered) Successfully WIP");
+   res.render("submitRegister");
 
                          
 
@@ -120,6 +113,66 @@ app.post('/submitRegister',function(req,res){
     
     
 // });
+
+app.use(function(req, res, next){
+  var err = req.session.error,
+      msg = req.session.notice,
+      success = req.session.success;
+
+  delete req.session.error;
+  delete req.session.success;
+  delete req.session.notice;
+
+  if (err) res.locals.error = err;
+  if (msg) res.locals.notice = msg;
+  if (success) res.locals.success = success;
+
+  next();
+});
+
+
+app.get('/login(T)?',function(req,res){
+  sess=req.session;
+  if(sess.username){ 
+
+  if((sess.username)=='admin'){
+    var abc = FacultyDetails.find({},function(err,resabc){
+       var hjk= resabc
+    var abc = sess.username
+    // console.log(hjk);
+    res.render("adminprofile",{
+      name:JSON.stringify(hjk),        
+    } );
+
+  } )
+ }
+ else { 
+ var abc = FacultyDetails.findOne({$or:[{username : sess.username}]},function(err,resabc){
+    var hjk= resabc
+    var abc = sess.username
+    console.log(hjk);
+    res.render("profile",{
+      name:JSON.stringify(hjk),        
+    } );
+ 
+}) 
+}
+ }  
+else {
+  res.render("login");
+
+}
+
+})
+
+
+
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  req.session.error = 'Please sign in!';
+  res.redirect('/login');
+}
 
 app.get('/hello',function(req,res){
 
@@ -148,7 +201,8 @@ app.post('/submitAdd',function(req,res){
                     Date      : req.body.date  
 
                 } ;
- console.log(insertObj)               
+ console.log(insertObj)  
+ console.log(req.body.username)             
 
   //  Fdetails.name("ABC").workshops.push(insertObj)             
 
@@ -157,15 +211,18 @@ if(err) throw err;
 var dbo = db.db("users");
 
 
-dbo.collection("faculty").update(
-   { name: req.body.username },
-   { $push:{workshops: insertObj  }}
-)
+dbo.collection("faculty").updateOne(
+   { username: req.body.username },
+   { $push:{workshops: insertObj  }},
+   {upsert: true}
+).catch((err) => {
+  console.log('Error: ' + err);
+})
 
 
 })
 
-res.send("Added Workshop Successfully WIP")
+res.render("submitDetails")
 
 })
 
@@ -190,13 +247,9 @@ app.get('/edit/:user/:title',function(req,resEdit){
 
 app.get('/upload/:user/:id',function(req,resUpl){
   var Wid = req.params.id
-  var abc = FacultyDetails.find({$or:[{UID : Wid}]},function(err,res){
-      var hjk= res[0].workshops[0]
-      console.log(hjk);
-      resUpl.render("upl",{
-        workshopDetails:JSON.stringify(hjk)
-      })
-  })
+  resUpl.render("upl",{
+        workshopDetails:JSON.stringify(Wid)
+        })
 
 });
 app.post('/submitEdit',function(req,res){
@@ -219,7 +272,7 @@ var dbo = db.db("users");
 
 console.log(req.body.id)
 dbo.collection("faculty").update(
-   { name: req.body.username,"workshops.Title":req.body.title },
+   { username: req.body.username,"workshops.Title":req.body.title },
    { $set:{"workshops.$.Title"      : req.body.title,
             "workshops.$.Duration"  : req.body.duration,
             "workshops.$.Organized" : req.body.organized,
@@ -230,30 +283,54 @@ dbo.collection("faculty").update(
    
   
 });
-res.send("Edited Successfully WIP")
+res.render("submitEdit")
 })
 
-app.post('/fileUpload',function(req,res){
-  var form = new formidable.IncomingForm();
 
-    form.parse(req);
+
+app.post('/fileUpload',function(req,res){
+  // console.log(req.body.fileName)
+  var filerenamed=req.body.fileName
+  var filerealname ;
+  var form = new formidable.IncomingForm();
+  //console.log(req.body.fileName)
+  var fileNewName ;
+
+    form.parse(req,function(err,fields,file){
+       console.log(file.upload.path);
+      console.log(fields.fileName)
+      fs.rename(file.upload.path, __dirname + '/uploads/' + fields.fileName +'.pdf', function(err) {
+        if (err) next(err);
+        // res.end();
+    });
+
+      
+    })
 
     form.on('fileBegin', function (name, file){
+      //console.log(fileNewName);
+      
         file.path = __dirname + '/uploads/' + file.name;
+        filerealname = file.name
     });
+
 
     form.on('file', function (name, file){
         console.log('Uploaded ' + file.name);
+        
     });
+    
+
 
     res.render('uplSuccess');
 
+  });
 
-});
+
 
 
 app.get('/success', (req, res) => res.send("Welcome "+req.query.username+"!!"));
-app.get('/error', (req, res) =>res.send("Fail") );// res.send("error logging in"));
+app.get('/error', (req, res) =>res.render("failLogin") );// res.send("error logging in"));
 
 passport.serializeUser(function(user, cb) {
   cb(null, user.id);
@@ -287,9 +364,46 @@ passport.use(new LocalStrategy(
   }
 ));
 
+app.get('/logout', function(req, res){
+  var name = req.user.username;
+  console.log("LOGGIN OUT " + req.user.username)
+  req.logout();
+  // res.redirect('/index');
+  req.session.notice = "You have successfully been logged out " + name + "!";
+  req.session.destroy(function(err) {
+    if(err) {
+      console.log(err);
+    } else {
+      res.redirect('/index');
+    }
+  });
+  
+});
+
+function nocache(req, res, next) {
+  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  res.header('Expires', '-1');
+  res.header('Pragma', 'no-cache');
+  next();
+}
+
+app.get('/view/:userNAME/:wsID', function (req, res) {
+  var filePath = "/uploads/"+req.params.wsID+".pdf";
+
+  fs.readFile(__dirname + filePath , function (err,data){
+      res.contentType("application/pdf");
+      res.send(data);
+  });
+});
+
 app.post('/loginT',
   passport.authenticate('local', { failureRedirect: '/error' }),
   function(req, resabc) {
+    
+    sess=req.session;
+    sess.username=req.user.username;
+
+
     if((req.user.username)=='admin'){
       var abc = FacultyDetails.find({},function(err,res){
          var hjk= res
@@ -321,6 +435,36 @@ app.get('*', function(req, res){
    res.send('Sorry, this is an invalid URL.');
 });
 
+app.post('/deleteWS',function(req,res){
+  var editObj =  {
+    // _id       : new ObjectID(),   
+    Title     : req.body.title,
+    Duration  : req.body.duration,
+    Organized : req.body.organized,
+    Sponsored : req.body.sponsored,
+    Fee       : req.body.fees,
+    Date      : req.body.date  
+} ;
+ console.log(editObj)               
 
+//  Fdetails.name("ABC").workshops.push(insertObj)             
+
+MongoClient.connect(url,function(err,db){
+if(err) throw err;
+var dbo = db.db("users");
+
+console.log(req.body.id)
+dbo.collection("faculty").updateOne(
+{ username: req.body.username},
+{ $pull:{workshops:{Title:req.body.title }}});
+});
+  
+  
+   res.render("deleteWS");
+
+
+                         
+
+});
 
 app.listen(3000);
