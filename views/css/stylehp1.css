@@ -1,0 +1,50 @@
+ html, body {
+    height: 100%;
+	margin: 0;
+	background-color: #f6f6f6;
+	
+
+        }
+
+
+
+
+
+.main{
+	height: 100%;
+	background-color: #f6f6f6;
+	display:block;
+	text-align: center;	
+	margin : auto;
+}
+
+.complaint-form,.status-form,.login-form{
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	flex-direction:column;
+	
+	
+}
+
+.optionFields{
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	/* align-content: space-around; */
+	flex-direction:column;
+	margin : 10 ;
+
+
+}
+.dropDown,.search{
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	flex-direction:column;
+
+}
+.mdl-data-table.mdl-data-table-default-non-numeric td {
+    text-align: left !important ; 
+  }
+ 
