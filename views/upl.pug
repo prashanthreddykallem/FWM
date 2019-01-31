@@ -1,7 +1,21 @@
+doctype html
 html
-  head
-    title Simple Upload Example
-  body
-    form(action='/fileUpload', enctype='multipart/form-data', method='post')
-      input(type='file', name='upload', multiple='')
-      input(type='submit', value='Upload')
+    head
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700', type='text/css')
+        link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+        style
+            include ./css/stylehp.css            
+            include ./css/material.min.css            
+        script
+            include ./css/material.min.js
+        title  Upload
+    body
+      div.main
+        h1.text-center(color:#515151) Upload
+        form(action='/fileUpload', enctype='multipart/form-data', method='post')
+          - var fileName1 = JSON.parse(workshopDetails)
+          - console.log(fileName1)
+          input(type='file', name='upload', multiple='')
+          input(type="hidden",name='fileName' value=`${JSON.stringify(fileName1).replace(/"/g,"")}`)
+          input(type='submit', value='Upload')
